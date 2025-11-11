@@ -1,0 +1,14 @@
+{
+  "name": "promatch",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "build": "npm install --prefix backend && npm install --prefix frontend/promatch-frontend && npm run build --prefix frontend/promatch-frontend",
+    "start": "npm run start --prefix backend"
+  
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}

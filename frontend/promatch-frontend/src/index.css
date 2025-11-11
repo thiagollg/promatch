@@ -1,0 +1,485 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-in {
+    animation: fade-in 0.6s ease-out;
+  }
+
+  .delay-1000 {
+    animation-delay: 1s;
+  }
+
+  /* Custom range slider */
+  input[type="range"].slider {
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  input[type="range"].slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #000;
+    cursor: pointer;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  input[type="range"].slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #000;
+    cursor: pointer;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  input[type="range"].slider::-webkit-slider-track {
+    background: #e5e7eb;
+    height: 8px;
+    border-radius: 4px;
+  }
+
+  input[type="range"].slider::-moz-range-track {
+    background: #e5e7eb;
+    height: 8px;
+    border-radius: 4px;
+  }
+
+  /* Hide scrollbar */
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  /* Custom scrollbar for activity list */
+  .activity-scroll::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .activity-scroll::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+  }
+
+  .activity-scroll::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+  }
+
+  .activity-scroll::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+}
+
+/* Stream Chat Styles - Minimalista y coherente */
+.str-chat {
+  font-family: inherit;
+  height: 100%;
+}
+
+.str-chat__channel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: #f9fafb;
+}
+
+.str-chat__container {
+  width: 100% !important;
+  height: 100% !important;
+  margin: 0 !important;
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
+}
+
+/* Header Styles */
+.str-chat__header-livestream {
+  background: white !important;
+  border-bottom: 1px solid #e5e7eb !important;
+  padding: 1rem !important;
+}
+
+.str-chat__header-livestream-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.str-chat__header-livestream-left .str-chat__avatar {
+  width: 40px;
+  height: 40px;
+}
+
+.str-chat__header-livestream-left .str-chat__header-livestream-left--title {
+  font-weight: 600;
+  color: #111827;
+  font-size: 1rem;
+}
+
+/* Message List */
+.str-chat__message-list {
+  background: #f9fafb !important;
+  padding: 1rem !important;
+}
+
+.str-chat__message {
+  margin-bottom: 1rem;
+}
+
+.str-chat__message-inner {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-end;
+}
+
+.str-chat__message--me .str-chat__message-inner {
+  flex-direction: row-reverse;
+}
+
+.str-chat__message-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.str-chat__message-bubble {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+  padding: 0.75rem 1rem;
+  max-width: 70%;
+  color: #111827;
+  font-size: 0.875rem;
+}
+
+.str-chat__message--me .str-chat__message-bubble {
+  background: #111827;
+  color: white;
+  border-color: #111827;
+}
+
+.str-chat__message-text {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.str-chat__message-timestamp {
+  font-size: 0.75rem;
+  color: #6b7280;
+  margin-top: 0.25rem;
+}
+
+.str-chat__message--me .str-chat__message-timestamp {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Input Styles */
+.str-chat__input-flat {
+  background: white !important;
+  border-top: 1px solid #e5e7eb !important;
+  padding: 1rem !important;
+}
+
+.str-chat__input-flat-wrapper {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.str-chat__input-flat--textarea {
+  flex: 1;
+  border: 1px solid #e5e7eb !important;
+  border-radius: 0.5rem !important;
+  padding: 0.75rem !important;
+  font-size: 0.875rem !important;
+  color: #111827 !important;
+  background: white !important;
+  resize: none;
+  min-height: 40px;
+}
+
+.str-chat__input-flat--textarea:focus {
+  outline: none !important;
+  border-color: #111827 !important;
+  box-shadow: 0 0 0 2px rgba(17, 24, 39, 0.1) !important;
+}
+
+.str-chat__input-flat--button {
+  background: #111827 !important;
+  color: white !important;
+  border: none !important;
+  border-radius: 0.5rem !important;
+  padding: 0.75rem 1.5rem !important;
+  font-weight: 500 !important;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.str-chat__input-flat--button:hover {
+  background: #1f2937 !important;
+}
+
+.str-chat__input-flat--button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.str-chat__list-notifications {
+  display: none !important;
+}
+
+/* Scrollbar personalizado para chat */
+.str-chat__message-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.str-chat__message-list::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.str-chat__message-list::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+.str-chat__message-list::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Override default Stream styles */
+.str-chat__channel-header {
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+}
+
+.str-chat__channel-header-content {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.str-chat__channel-header-title {
+  font-weight: 600;
+  color: #111827;
+  font-size: 1rem;
+}
+
+/* React Quill Styles - Minimalista y coherente */
+.quill {
+  background: white;
+}
+
+.ql-container {
+  font-family: inherit;
+  font-size: 0.875rem;
+  color: #111827;
+  min-height: 200px;
+}
+
+.ql-editor {
+  min-height: 200px;
+  padding: 1rem;
+  line-height: 1.6;
+}
+
+.ql-editor.ql-blank::before {
+  color: #9ca3af;
+  font-style: normal;
+}
+
+.ql-toolbar {
+  border-top: 1px solid #e5e7eb;
+  border-left: 1px solid #e5e7eb;
+  border-right: 1px solid #e5e7eb;
+  border-bottom: none;
+  background: #f9fafb;
+  padding: 0.75rem;
+  border-radius: 0.5rem 0.5rem 0 0;
+}
+
+.ql-container {
+  border-bottom: 1px solid #e5e7eb;
+  border-left: 1px solid #e5e7eb;
+  border-right: 1px solid #e5e7eb;
+  border-top: none;
+  border-radius: 0 0 0.5rem 0.5rem;
+}
+
+.ql-stroke {
+  stroke: #6b7280;
+}
+
+.ql-fill {
+  fill: #6b7280;
+}
+
+.ql-picker-label {
+  color: #6b7280;
+}
+
+.ql-toolbar button:hover,
+.ql-toolbar button.ql-active {
+  color: #111827;
+}
+
+.ql-toolbar button:hover .ql-stroke,
+.ql-toolbar button.ql-active .ql-stroke {
+  stroke: #111827;
+}
+
+.ql-toolbar button:hover .ql-fill,
+.ql-toolbar button.ql-active .ql-fill {
+  fill: #111827;
+}
+
+.ql-toolbar .ql-picker-item:hover {
+  color: #111827;
+}
+
+.ql-toolbar .ql-picker-item.ql-selected {
+  color: #111827;
+}
+
+/* Rich Text Content Styles - Preservar estilos del HTML generado por ReactQuill */
+/* Usar !important para sobrescribir estilos de Tailwind y preservar el formato del rich text */
+.rich-text-content {
+  color: #4b5563 !important;
+  line-height: 1.75 !important;
+  font-size: 0.875rem !important;
+  max-width: 100% !important;
+}
+
+.rich-text-content p {
+  margin: 0 0 1rem 0 !important;
+  padding: 0 !important;
+  color: inherit !important;
+  font-size: inherit !important;
+  line-height: inherit !important;
+}
+
+.rich-text-content p:last-child {
+  margin-bottom: 0 !important;
+}
+
+.rich-text-content h1,
+.rich-text-content h2,
+.rich-text-content h3 {
+  font-weight: 700 !important;
+  margin-top: 1.5rem !important;
+  margin-bottom: 1rem !important;
+  line-height: 1.2 !important;
+  color: #111827 !important;
+}
+
+.rich-text-content h1 {
+  font-size: 1.875rem !important;
+}
+
+.rich-text-content h2 {
+  font-size: 1.5rem !important;
+}
+
+.rich-text-content h3 {
+  font-size: 1.25rem !important;
+}
+
+.rich-text-content ul,
+.rich-text-content ol {
+  margin: 1rem 0 !important;
+  padding-left: 2rem !important;
+  list-style-position: outside !important;
+}
+
+.rich-text-content ul {
+  list-style-type: disc !important;
+}
+
+.rich-text-content ol {
+  list-style-type: decimal !important;
+}
+
+.rich-text-content li {
+  margin: 0.5rem 0 !important;
+  padding: 0 !important;
+  color: inherit !important;
+}
+
+.rich-text-content a {
+  color: #111827 !important;
+  text-decoration: underline !important;
+  text-underline-offset: 2px !important;
+}
+
+.rich-text-content a:hover {
+  color: #374151 !important;
+}
+
+.rich-text-content strong,
+.rich-text-content b {
+  font-weight: 700 !important;
+  color: inherit !important;
+}
+
+.rich-text-content em,
+.rich-text-content i {
+  font-style: italic !important;
+  color: inherit !important;
+}
+
+.rich-text-content u {
+  text-decoration: underline !important;
+  color: inherit !important;
+}
+
+.rich-text-content blockquote {
+  border-left: 4px solid #e5e7eb !important;
+  padding-left: 1rem !important;
+  margin: 1rem 0 !important;
+  color: #6b7280 !important;
+  font-style: italic !important;
+}
+
+.rich-text-content code {
+  background-color: #f3f4f6 !important;
+  padding: 0.125rem 0.375rem !important;
+  border-radius: 0.25rem !important;
+  font-family: monospace !important;
+  font-size: 0.875em !important;
+}
+
+.rich-text-content pre {
+  background-color: #f3f4f6 !important;
+  padding: 1rem !important;
+  border-radius: 0.5rem !important;
+  overflow-x: auto !important;
+  margin: 1rem 0 !important;
+}
+
+.rich-text-content pre code {
+  background-color: transparent !important;
+  padding: 0 !important;
+}
