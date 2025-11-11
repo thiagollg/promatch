@@ -107,7 +107,7 @@ export async function createPaymentPreference(sellerAccessToken, paymentData) {
             name: payerName
         },
         external_reference: externalReference,
-        notification_url: "https://relations-mating-tips-publicity.trycloudflare.com/api/mercadopago/webhook",
+        notification_url: `${process.env.OFFICIAL_URL}/api/mercadopago/webhook`,
         back_urls: {
             success: successUrl,
             failure: failureUrl,
