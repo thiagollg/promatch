@@ -113,7 +113,7 @@ export async function createPaymentPreference(sellerAccessToken, paymentData) {
             failure: failureUrl,
             pending: pendingUrl
         },
-        //auto_return: "approved",
+        auto_return: "approved",
         payment_methods: {
             excluded_payment_methods: [],
             excluded_payment_types: [],
