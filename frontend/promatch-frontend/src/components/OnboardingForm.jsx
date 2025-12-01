@@ -25,27 +25,27 @@ const OnboardingForm = ({ mode = 'onboarding' }) => {
     role: authUser?.role?._id || authUser?.role || "",
   })
 
-  // Estados para los selects
+ 
   const [selectedLanguage, setSelectedLanguage] = useState("")
   const [selectedSubject, setSelectedSubject] = useState("")
   
-  // Estado para preview del avatar (data URL)
+
   const [avatarPreview, setAvatarPreview] = useState(authUser?.avatar || "")
   const [avatarError, setAvatarError] = useState("")
   
-  // Referencia al input file
+
   const fileInputRef = useRef(null)
   
-  // Tamaño máximo del avatar (5MB)
-  const MAX_AVATAR_SIZE = 5 * 1024 * 1024 // 5MB
+
+  const MAX_AVATAR_SIZE = 5 * 1024 * 1024 
   
-  // Inicializar avatarPreview cuando authUser cambie o cuando formData.avatar tenga valor pero avatarPreview esté vacío
+  
   useEffect(() => {
-    // Si hay avatar en authUser y avatarPreview está vacío, inicializarlo
+    
     if (authUser?.avatar && !avatarPreview) {
       setAvatarPreview(authUser.avatar)
     }
-    // Si formData.avatar tiene valor pero avatarPreview está vacío, inicializarlo
+    
     if (formData.avatar && !avatarPreview) {
       setAvatarPreview(formData.avatar)
     }
@@ -77,7 +77,7 @@ const OnboardingForm = ({ mode = 'onboarding' }) => {
     mutationFn: uploadAvatar,
     onSuccess: (data) => {
       console.log('Upload success response:', data)
-      // El backend devuelve { success: true, data: { secure_url: "..." } }
+      
       const avatarUrl = data?.data?.secure_url || data?.data?.url || data?.secure_url || data?.url
       
       if (avatarUrl) {
@@ -103,10 +103,10 @@ const OnboardingForm = ({ mode = 'onboarding' }) => {
     onSuccess: (data) => {
       const redirectUrl = data?.url || data?.redirectUrl || data?.init_point || data?.sandbox_init_point || data?.authorization_url
       if (redirectUrl) {
-        // Guardar todos los datos del formulario incluyendo avatar preview
+        
         const dataToSave = {
           ...formData,
-          avatarPreview: avatarPreview, // Guardar también la preview
+          avatarPreview: avatarPreview, 
         }
         localStorage.setItem('onboardingData', JSON.stringify(dataToSave))
         queryClient.invalidateQueries({ queryKey: ["authUser"] })
@@ -123,7 +123,7 @@ const OnboardingForm = ({ mode = 'onboarding' }) => {
     onSuccess: () => {
       toast.success("¡Cuenta eliminada exitosamente!")
       queryClient.removeQueries({ queryKey: ["authUser"], exact: false })
-      // Esperar un momento para que el usuario vea el toast antes de redirigir
+      
       setTimeout(() => {
         window.location.href = "/login"
       }, 1500)
@@ -132,7 +132,7 @@ const OnboardingForm = ({ mode = 'onboarding' }) => {
   })
 
   useEffect(() => {
-    // Restaurar datos guardados al regresar de MercadoPago
+    
     const saved = localStorage.getItem('onboardingData')
     if (saved) {
       try {
@@ -148,7 +148,7 @@ const OnboardingForm = ({ mode = 'onboarding' }) => {
           fullName: parsed.fullName || authUser?.fullName || "",
           role: parsed.role || authUser?.role?._id || authUser?.role || "",
         })
-        // Restaurar preview del avatar
+        
         if (parsed.avatarPreview) {
           setAvatarPreview(parsed.avatarPreview)
         } else if (parsed.avatar) {
@@ -160,7 +160,7 @@ const OnboardingForm = ({ mode = 'onboarding' }) => {
       }
     }
     
-    // Manejar respuesta de MercadoPago
+    
     const urlParams = new URLSearchParams(window.location.search)
     if (urlParams.get('mp_connected') === 'true') {
       toast.success('¡Mercado Pago conectado!')
@@ -172,7 +172,7 @@ const OnboardingForm = ({ mode = 'onboarding' }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    // Validar que haya al menos un idioma y una materia
+    
     if (formData.language.length === 0) {
       toast.error("Debes seleccionar al menos un idioma")
       return
@@ -182,16 +182,16 @@ const OnboardingForm = ({ mode = 'onboarding' }) => {
       return
     }
     
-    // Validaciones adicionales para profesores en modo onboarding
+    // Validaciones adicionales
     if (mode === 'onboarding' && isProfesor) {
-      // Validar que la bio no esté vacía (ReactQuill puede devolver HTML vacío o solo <p><br></p>)
+      
       const bioText = formData.bio?.replace(/<[^>]*>/g, '').trim()
       if (!bioText || bioText === '') {
         toast.error("Debes completar el campo 'Sobre mí' para continuar")
         return
       }
       
-      // Validar que MercadoPago esté conectado
+      
       if (!mpStatus?.isConnected) {
         toast.error("Debes conectar tu cuenta de MercadoPago para continuar")
         return
@@ -211,33 +211,33 @@ const OnboardingForm = ({ mode = 'onboarding' }) => {
     
     console.log('File selected:', file.name, file.type, file.size)
     
-    // Limpiar error previo
+    
     setAvatarError("")
     
-    // Validar tipo de archivo
+    
     if (!file.type.startsWith('image/')) {
       setAvatarError("El archivo debe ser una imagen")
       toast.error("El archivo debe ser una imagen")
-      e.target.value = "" // Limpiar el input
+      e.target.value = "" 
       return
     }
     
-    // Validar tamaño
+    
     if (file.size > MAX_AVATAR_SIZE) {
       setAvatarError(`El archivo es demasiado grande. Tamaño máximo: ${MAX_AVATAR_SIZE / (1024 * 1024)}MB`)
       toast.error(`El archivo es demasiado grande. Tamaño máximo: ${MAX_AVATAR_SIZE / (1024 * 1024)}MB`)
-      e.target.value = "" // Limpiar el input
+      e.target.value = "" 
       return
     }
     
-    // Mostrar preview inmediata con data URL
+    
     const reader = new FileReader()
     reader.onloadend = () => {
       try {
         const dataUrl = reader.result
         if (dataUrl) {
           setAvatarPreview(dataUrl)
-          // Actualizar formData con la preview temporal mientras se sube
+          
           setFormData((prev) => ({ ...prev, avatar: dataUrl }))
         }
       } catch (error) {
@@ -253,8 +253,7 @@ const OnboardingForm = ({ mode = 'onboarding' }) => {
     }
     reader.readAsDataURL(file)
     
-    // Subir al servidor (asíncrono)
-    // Asegurar que el file se pasa correctamente
+    
     console.log('Uploading file:', file.name, file.type, file.size)
     uploadAvatarMutation(file)
   }

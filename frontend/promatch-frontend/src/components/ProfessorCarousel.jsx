@@ -9,8 +9,8 @@ const ProfessorCarousel = ({ professors }) => {
     if (!container || professors.length === 0) return
 
     let scrollPosition = 0
-    const scrollSpeed = 0.5 // píxeles por frame (ajustable)
-    const cardWidth = 352 + 32 // w-80 + gap-8
+    const scrollSpeed = 0.5 
+    const cardWidth = 352 + 32 
     const halfWidth = (cardWidth * professors.length)
     let intervalId = null
     let isPaused = false
@@ -20,7 +20,7 @@ const ProfessorCarousel = ({ professors }) => {
       
       scrollPosition += scrollSpeed
       
-      // Si llegamos a la mitad (donde duplicamos los items), reiniciar sin saltar
+      
       if (scrollPosition >= halfWidth) {
         scrollPosition = 0
       }
@@ -28,10 +28,10 @@ const ProfessorCarousel = ({ professors }) => {
       container.scrollLeft = scrollPosition
     }
 
-    // Iniciar el scroll automático
-    intervalId = setInterval(scroll, 16) // ~60fps
+  
+    intervalId = setInterval(scroll, 16) 
 
-    // Pausar al hacer hover
+   
     const handleMouseEnter = () => {
       isPaused = true
     }

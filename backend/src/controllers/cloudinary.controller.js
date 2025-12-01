@@ -9,13 +9,12 @@ export async function uploadAvatar(req, res) {
             });
         }
 
-        // Convertir el buffer a una cadena base64 o usar upload_stream
-        // Opción 1: Usar upload_stream (más eficiente para archivos grandes)
+        
         const uploadPromise = new Promise((resolve, reject) => {
             const uploadStream = cloudinary.uploader.upload_stream(
                 {
                     resource_type: 'auto',
-                    folder: 'avatars', // Opcional: organizar en carpetas en Cloudinary
+                    folder: 'avatars', 
                 },
                 (error, result) => {
                     if (error) {
@@ -26,7 +25,7 @@ export async function uploadAvatar(req, res) {
                 }
             );
 
-            // Enviar el buffer directamente a Cloudinary
+           
             uploadStream.end(req.file.buffer);
         });
 

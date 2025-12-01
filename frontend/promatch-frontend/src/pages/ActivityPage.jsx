@@ -15,14 +15,14 @@ const ActivityPage = () => {
     enabled: !!authUser,
   })
 
-  // Procesar datos para los gráficos (últimos 12 meses)
+  // Procesar datos para los gráficos
   const chartData = useMemo(() => {
     if (!activityData?.activities) return { classes: [], payments: [] }
 
     const now = new Date()
     const months = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']
     
-    // Generar los últimos 12 meses desde hoy
+    
     const last12Months = []
     for (let i = 11; i >= 0; i--) {
       const date = new Date(now.getFullYear(), now.getMonth() - i, 1)
@@ -37,18 +37,18 @@ const ActivityPage = () => {
       })
     }
     
-    // Inicializar datos para los últimos 12 meses
+    
     const classesData = last12Months.map(m => ({ month: m.label, count: 0, key: m.key }))
     const paymentsData = last12Months.map(m => ({ month: m.label, amount: 0, key: m.key }))
 
-    // Calcular la fecha límite (inicio del mes hace 12 meses)
+    
     const twelveMonthsAgo = new Date(now.getFullYear(), now.getMonth() - 11, 1)
     twelveMonthsAgo.setHours(0, 0, 0, 0)
 
     activityData.activities.forEach(activity => {
       const date = new Date(activity.data.createdAt)
       
-      // Solo procesar actividades de los últimos 12 meses (desde el inicio del mes más antiguo)
+     
       if (date >= twelveMonthsAgo && date <= now) {
         const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`
         const monthIndex = last12Months.findIndex(m => m.key === monthKey)
@@ -57,7 +57,7 @@ const ActivityPage = () => {
           if (activity.type === 'virtual_class') {
             classesData[monthIndex].count += 1
           } else if (activity.type === 'payment') {
-            // Solo contar pagos aprobados
+          
             if (activity.data.status === 'approved') {
               paymentsData[monthIndex].amount += activity.data.amount
             }

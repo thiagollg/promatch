@@ -20,7 +20,7 @@ const Connections = () => {
     queryFn: getMyProffessors
   })
 
-  // Obtener conteos no leídos (se actualiza vía eventos de Stream Chat)
+  // Obtener conteos no leídos 
   const { data: unreadData, isLoading: loadingUnread } = useQuery({
     queryKey: ["unreadCounts"],
     queryFn: getUnreadCounts
@@ -34,7 +34,7 @@ const Connections = () => {
 
   const unreadMessages = unreadData?.unreadMessages || {}
 
-  // Conectar Stream Chat y escuchar eventos para actualizar conteos en tiempo real
+  // Conectar Stream Chat y escuchar eventos para actualizar conteos
   useEffect(() => {
     if (!authUser || !tokenData?.token) return
 
@@ -48,7 +48,7 @@ const Connections = () => {
       try {
         client = StreamChat.getInstance(STREAM_API_KEY)
 
-        // Conectar usuario si no está conectado
+        
         if (!client.userID || client.userID !== authUser._id) {
           await client.connectUser(
             {
@@ -60,32 +60,31 @@ const Connections = () => {
           )
         }
 
-        // Escuchar eventos de mensajes nuevos y leídos
-        // Estos eventos se disparan automáticamente cuando hay cambios en cualquier canal
+        
         handleMessageNew = (event) => {
-          // Cuando llega un mensaje nuevo en cualquier canal, actualizar conteos
+         
           console.log('📬 New message event received:', event)
           queryClient.invalidateQueries({ queryKey: ['unreadCounts'] })
         }
 
         handleMessageRead = (event) => {
-          // Cuando se lee un mensaje en cualquier canal, actualizar conteos
+          
           console.log('👁️ Message read event received:', event)
           queryClient.invalidateQueries({ queryKey: ['unreadCounts'] })
         }
 
         handleNotification = (event) => {
-          // Cuando llega una notificación de mensaje nuevo
+          
           console.log('🔔 Notification event received:', event)
           queryClient.invalidateQueries({ queryKey: ['unreadCounts'] })
         }
 
-        // Suscribirse a eventos globales de Stream Chat
+       
         client.on('message.new', handleMessageNew)
         client.on('message.read', handleMessageRead)
         client.on('notification.message_new', handleNotification)
         
-        // También escuchar cambios en el estado de lectura del usuario
+        
         handleUserUpdated = () => {
           queryClient.invalidateQueries({ queryKey: ['unreadCounts'] })
         }

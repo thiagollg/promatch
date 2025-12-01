@@ -6,46 +6,46 @@ import ProfessorCarousel from '../components/ProfessorCarousel'
 import { Search, MapPin, Languages, BookOpen, DollarSign, Filter, X, ChevronDown } from 'lucide-react'
 
 const HomePage = () => {
-  // estado de filtros (draft y aplicados)
+ 
   const [q, setQ] = useState("")
   const [locationId, setLocationId] = useState("")
   const [languageId, setLanguageId] = useState("")
   const [subjectId, setSubjectId] = useState("")
   const [priceMax, setPriceMax] = useState(0)
-  const [sort, setSort] = useState("desc") // asc | desc
+  const [sort, setSort] = useState("desc") 
   const [showAdvanced, setShowAdvanced] = useState(false)
 
   const [appliedFilters, setAppliedFilters] = useState({ q: "", locationId: "", languageId: "", subjectId: "", priceMax: 0, sort: "desc" })
   const [isSearchActive, setIsSearchActive] = useState(false)
   
-  // Determinar si hay búsqueda aplicada (incluye búsqueda sin filtros)
+  
   const hasAppliedSomething = useMemo(() => {
     return isSearchActive || Boolean(appliedFilters.q || appliedFilters.locationId || appliedFilters.languageId || appliedFilters.subjectId || (appliedFilters.priceMax && Number(appliedFilters.priceMax) > 0))
   }, [appliedFilters, isSearchActive])
   
-  // Obtener profesores recomendados por subjects (solo cuando no hay búsqueda)
+  
   const {data: recommendedProfessors=[], isLoading: loadingRecommended} = useQuery({
     queryKey: ["recommended-professors-by-subjects"],
     queryFn: getRecommendedProfessorsBySubjects,
     enabled: !hasAppliedSomething,
   })
   
-  // Cargar opciones de selects
+  
   const { data: languages = [] } = useQuery({ queryKey: ["languages"], queryFn: getAllLanguages })
   const { data: locations = [] } = useQuery({ queryKey: ["locations"], queryFn: getAllLocations })
   const { data: subjects = [] } = useQuery({ queryKey: ["subjects"], queryFn: getAllSubjects })
 
-  // Parámetros para API
+  
   const baseParams = useMemo(() => {
     const params = {
       limit: 50,
     }
-    // Si no hay filtros, no se envía sort para que el backend ordene aleatoriamente
+    
     const hasFilters = Boolean(appliedFilters.q || appliedFilters.locationId || appliedFilters.languageId || appliedFilters.subjectId || (appliedFilters.priceMax && Number(appliedFilters.priceMax) > 0))
     if (hasFilters) {
       params.sort = appliedFilters.sort || "desc"
     } else {
-      // Cuando no hay filtros, se usa "random" para orden aleatorio
+      
       params.sort = "random"
     }
     if (appliedFilters.q) params.q = appliedFilters.q
@@ -56,7 +56,7 @@ const HomePage = () => {
     return params
   }, [appliedFilters])
 
-  // Query infinita (solo cuando hay búsqueda aplicada)
+  
   const {
     data,
     isLoading,
@@ -67,22 +67,22 @@ const HomePage = () => {
     queryKey: ["professors-search", baseParams],
     queryFn: ({ pageParam = 1 }) => searchProfessors({ ...baseParams, page: pageParam }),
     getNextPageParam: (lastPage, allPages) => {
-      // Verificar si hay más páginas basándose en hasMore y el total de items cargados
+      
       if (lastPage?.hasMore === true) {
         return (lastPage.page || allPages.length) + 1
       }
-      // Si hasMore es false o undefined, no hay más páginas
+      
       return undefined
     },
     initialPageParam: 1,
     enabled: hasAppliedSomething,
   })
 
-  // Sentinel para infinite scroll
+  
   const sentinelRef = useRef(null)
   const fetchNextPageRef = useRef(fetchNextPage)
   
-  // Mantener la referencia de fetchNextPage actualizada
+  // Mantener la referencia de fetchNextPage 
   useEffect(() => {
     fetchNextPageRef.current = fetchNextPage
   }, [fetchNextPage])
@@ -102,8 +102,8 @@ const HomePage = () => {
       },
       {
         root: null,
-        rootMargin: '300px', // Cargar cuando el sentinel esté a 300px del viewport
-        threshold: 0, // Disparar tan pronto como el elemento entre en el viewport (considerando rootMargin)
+        rootMargin: '300px',
+        threshold: 0, 
       }
     )
     
@@ -113,10 +113,10 @@ const HomePage = () => {
     }
   }, [hasNextPage, isFetchingNextPage, isLoading, hasAppliedSomething, data])
 
-  // Aplicar filtros al hacer click en Buscar
+ 
   const applyFilters = () => {
     setAppliedFilters({ q, locationId, languageId, subjectId, priceMax, sort })
-    setIsSearchActive(true) // Activar búsqueda incluso sin filtros
+    setIsSearchActive(true)
   }
 
   // Reiniciar búsqueda
@@ -128,10 +128,10 @@ const HomePage = () => {
     setPriceMax(0)
     setSort("desc")
     setAppliedFilters({ q: "", locationId: "", languageId: "", subjectId: "", priceMax: 0, sort: "desc" })
-    setIsSearchActive(false) // Desactivar búsqueda para volver al carousel
+    setIsSearchActive(false) 
   }
 
-  // Cambiar orden
+
   const handleSortChange = (e) => {
     const value = e.target.value
     setSort(value)

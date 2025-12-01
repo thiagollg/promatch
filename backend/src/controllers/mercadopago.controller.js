@@ -36,7 +36,7 @@ export const oauthCallback = async (req, res) => {
             return res.status(400).json({ message: "Authorization code not provided" });
         }
 
-        // Extract user ID from state (format: "uid:userId")
+       
         const userId = state?.split(':')[1];
         console.log("👤 Extracted User ID:", userId);
         
@@ -46,7 +46,7 @@ export const oauthCallback = async (req, res) => {
         }
 
         console.log("🔄 Exchanging authorization code for tokens...");
-        // Exchange authorization code for tokens
+       
         const tokenData = await exchangeAuthorizationCode(code);
         console.log("tokenData", tokenData)
         console.log("✅ Tokens received:", {
@@ -55,11 +55,11 @@ export const oauthCallback = async (req, res) => {
             sellerId: tokenData.sellerId
         });
         
-        // Create or update MercadoPago document
+        
         let mercadoPagoDoc = await MercadoPago.findOne({ user: userId });
         
         if (mercadoPagoDoc) {
-            // Update existing document
+           
             mercadoPagoDoc.accessToken = tokenData.accessToken;
             mercadoPagoDoc.refreshToken = tokenData.refreshToken;
             mercadoPagoDoc.expiresAt = tokenData.expiresAt;
@@ -67,7 +67,7 @@ export const oauthCallback = async (req, res) => {
             mercadoPagoDoc.isConnected = true;
             await mercadoPagoDoc.save();
         } else {
-            // Create new document
+           
             mercadoPagoDoc = await MercadoPago.create({
                 user: userId,
                 accessToken: tokenData.accessToken,
@@ -78,7 +78,7 @@ export const oauthCallback = async (req, res) => {
             });
         }
 
-        // Update user with MercadoPago reference
+       
         const updatedUser = await User.findByIdAndUpdate(
             userId,
             {
@@ -94,7 +94,7 @@ export const oauthCallback = async (req, res) => {
 
         console.log("✅ User updated successfully:", updatedUser.email);
         
-        // Redirect to frontend with success message
+        
         const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
         console.log("🔄 Redirecting to:", `${frontendUrl}/onboarding?mp_connected=true`);
         return res.redirect(`${frontendUrl}/onboarding?mp_connected=true`);
@@ -147,34 +147,34 @@ export const createPayment = async (req, res) => {
             return res.status(401).json({ message: "User not authenticated" });
         }
 
-        // Obtener el usuario actual con su rol populado
+        
         const currentUser = await User.findById(userId).populate('role', 'name');
         if (!currentUser) {
             return res.status(404).json({ message: "Current user not found" });
         }
 
-        // Verificar que el usuario actual no sea profesor
+        
         if (currentUser.role?.name === "Profesor") {
             return res.status(403).json({ message: "Teachers cannot pay other teachers" });
         }
 
-        // Obtener información del profesor
+        
         const professor = await User.findById(professorId).populate('role', 'name').populate('mercadopago');
         if (!professor) {
             return res.status(404).json({ message: "Professor not found" });
         }
 
-        // Verificar que el profesor al que intenta pagar sea realmente un profesor
+      
         if (professor.role?.name !== "Profesor") {
             return res.status(400).json({ message: "The user you are trying to pay is not a teacher" });
         }
 
-        // Verificar que el profesor tenga Mercado Pago conectado
+        
         if (!professor.mercadopago?.isConnected || !professor.mercadopago?.accessToken) {
             return res.status(400).json({ message: "Professor has not connected Mercado Pago" });
         }
 
-        // Obtener información del usuario que paga
+        
         const payer = await User.findById(userId);
         if (!payer) {
             return res.status(404).json({ message: "Payer not found" });
@@ -200,14 +200,13 @@ export const createPayment = async (req, res) => {
             amount,
             externalReference  
         });
-        //console.log("paymentData", paymentData)
+        
         const preference = await createPaymentPreference(
             professor.mercadopago.accessToken,
             paymentData
         );
         console.log(professor.mercadopago.accessToken)
-        //console.log ("La preferencia",preference)
-        // Guardar información del pago en la base de datos
+       
         
         
         return res.status(200).json({
@@ -231,17 +230,7 @@ export const webhook = async (req, res) => {
         if (type === 'payment') {
             const paymentId = data.id;
             
-            // Buscar el pago en nuestra base de datos por preference_id
-            //const payment = await Payment.findOne({ mpPreferenceId: paymentId }).populate('sender receiver');
-            
-            //if (!payment) {
-            //    console.log("⚠️ Payment not found in database:", paymentId);
-            //    return res.status(200).json({ message: "Payment not found" });
-            //}
-
-            // Obtener detalles del pago desde Mercado Pago
-            //const professor = await User.findById(payment.receiver);
-            //const paymentDetails = await getPaymentDetails(professor.mercadopago.accessToken, paymentId);
+           
             const paymentDetails = await getPaymentDetails(process.env.MERCADOPAGO_ACCESS_TOKEN, paymentId);
             console.log("leeeeeer", paymentDetails)
             console.log("💰 Payment details:", {
@@ -255,20 +244,20 @@ export const webhook = async (req, res) => {
                 paymentId: paymentDetails.id,
                 amount: paymentDetails.transaction_amount,
                 status: paymentDetails.status,
-                date: paymentDetails.date_created, // o date_approved
+                date: paymentDetails.date_created, 
                 externalReference: paymentDetails.external_reference
               };
               
               const [, userId, professorId] = finaldata.externalReference.split("_");
 
-              // Crear el registro del pago en tu base de datos
+             
               const payment = new Payment({
                 sender: userId,              // alumno
                 receiver: professorId,       // profesor
                 amount: finaldata.amount,
-                mpPaymentId: finaldata.paymentId, // ID del pago en Mercado Pago
-                status: finaldata.status,         // "approved", "pending", etc.
-                date: finaldata.date              // guardás la fecha
+                mpPaymentId: finaldata.paymentId, 
+                status: finaldata.status,         
+                date: finaldata.date              
               });
               
               await payment.save();

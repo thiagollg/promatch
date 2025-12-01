@@ -58,26 +58,26 @@ const ProffessorCard = ({ proffessor }) => {
     return String(field)
   }
 
-  // Función para extraer solo el texto del HTML sin modificar el campo original
+  
   const stripHtml = (html) => {
     if (!html) return ''
     
-    // Si no es string, convertirlo
+    
     const htmlString = String(html)
     
-    // Si no contiene tags HTML, devolverlo tal cual
+   
     if (!htmlString.includes('<')) {
       return htmlString.trim()
     }
     
-    // Crear un elemento temporal para extraer el texto
+    
     const tempDiv = document.createElement('div')
     tempDiv.innerHTML = htmlString
     
-    // Obtener solo el texto y limpiar espacios extra
+  
     const text = tempDiv.textContent || tempDiv.innerText || ''
     
-    // Limpiar espacios múltiples y saltos de línea
+    
     return text.replace(/\s+/g, ' ').trim()
   }
 

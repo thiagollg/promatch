@@ -16,17 +16,17 @@ const Proffessor = () => {
   const queryClient = useQueryClient();
   const {authUser} = useAuthUser();
   
-  // Verificar si el usuario actual es profesor
+  
   const isCurrentUserProfessor = authUser?.role?.name === "Profesor";
   
-  // Obtener información del profesor
+  // información del profesor
   const {data: professor, isLoading: loadingProfessor} = useQuery({
     queryKey: ["professor", id],
     queryFn: () => getProfessorById(id),
     enabled: !!id
   })
 
-  // Verificar estado de conexión
+  
   const {data: connectionStatus, isLoading: loadingConnectionStatus} = useQuery({
     queryKey: ["connectionStatus", id],
     queryFn: () => checkConnectionStatus(id),
@@ -35,7 +35,7 @@ const Proffessor = () => {
 
   
 
-  // Mutación para conectar
+
   const {mutate: connectMutation, isPending: isConnecting} = useMutation({
     mutationFn: createConnection,
     onSuccess: () => {
@@ -48,7 +48,7 @@ const Proffessor = () => {
     }
   })
 
-  // Mutación para crear pago
+ 
   const {mutate: paymentMutation, isPending: isCreatingPayment} = useMutation({
     mutationFn: createPayment,
     onSuccess: (data) => {
@@ -80,11 +80,11 @@ const Proffessor = () => {
     navigate('/connections')
   }
 
-  // Calcular cantidad de conexiones
+  
   const connectionCount = professor?.connection?.length || 0;
   const isConnected = connectionStatus?.isConnected || false;
 
-  // Funciones de formato
+  
   const formatLanguages = (languages) => {
     if (!languages || languages.length === 0) return []
     if (Array.isArray(languages)) {

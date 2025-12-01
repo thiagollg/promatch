@@ -9,7 +9,7 @@ router.use(protectRoute)
 
 router.get("/proffesorsconnected", getMyProffessors);
 router.put("/professor/:id/connect", createConnection);
-//router.get("/similar", getRecommendedProffessors);
+
 router.get("/recommended-by-subjects", getRecommendedProfessorsBySubjects);
 router.get("/professors/search", searchProfessors);
 router.get("/professor/:id", getProfessorById);

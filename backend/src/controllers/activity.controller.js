@@ -73,7 +73,7 @@ export const createVirtualClass = async (req, res) => {
         //console.log("🧩 channel:", channelId);
         //console.log("🧩 tipo:", typeof participants);
 
-        // Verificar que el usuario esté en los participantes
+
         if (!participants.includes(userId.toString())) {
             return res.status(400).json({ message: "User must be a participant" });
         }

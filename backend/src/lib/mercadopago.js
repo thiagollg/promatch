@@ -6,9 +6,9 @@ const MP_BASE_AUTH_URL = "https://auth.mercadopago.com/authorization";
 
 export function getMarketplaceConnectUrl({ state }) {
     const clientId = process.env.MP_CLIENT_ID?.replace(/"/g, '');
-    const redirectUri = process.env.MP_REDIRECT_URI?.replace(/"/g, ''); // must be configured in MP app
-    const responseType = "code"; // OAuth authorization code
-    const marketplace = "mp"; // enables marketplace mode
+    const redirectUri = process.env.MP_REDIRECT_URI?.replace(/"/g, ''); 
+    const responseType = "code";
+    const marketplace = "mp"; 
 
     if (!clientId || !redirectUri) {
         throw new Error("Missing MP_CLIENT_ID or MP_REDIRECT_URI environment variables");
@@ -19,7 +19,7 @@ export function getMarketplaceConnectUrl({ state }) {
         response_type: responseType,
         redirect_uri: redirectUri,
         platform_id: marketplace,
-        state: state || "", // echo back to prevent CSRF and track user/session
+        state: state || "", 
     });
 
     return `${MP_BASE_AUTH_URL}?${params.toString()}`;
@@ -68,7 +68,7 @@ export async function exchangeAuthorizationCode(authorizationCode) {
 
     const data = await response.json();
     
-    // Calculate expiration time (MP tokens typically last 6 hours)
+    
     const expiresAt = new Date(Date.now() + (data.expires_in * 1000));
     
     return {
@@ -77,7 +77,7 @@ export async function exchangeAuthorizationCode(authorizationCode) {
         expiresAt,
         scope: data.scope,
         userId: data.user_id,
-        sellerId: data.user_id, // In marketplace mode, user_id is the seller ID
+        sellerId: data.user_id, 
     };
 }
 

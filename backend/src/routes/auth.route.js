@@ -14,7 +14,7 @@ router.post("/onboarding", protectRoute, onboard);
 
 router.get("/me", protectRoute, async (req, res) => {
     try {
-        // Poblar el rol y mercadopago del usuario
+       
         await req.user.populate('role', 'name');
         await req.user.populate('mercadopago');
         res.status(200).json({success: true, message: "User logged in successfully", user: req.user})
